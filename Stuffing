@@ -1,0 +1,136 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// ------------------------------------------------------
+// CHARACTER STUFFING
+// ------------------------------------------------------
+string charStuff(const string &data) {
+    string flag = "F";
+    string esc  = "E";
+    string result = flag;
+
+    for (char c : data) {
+        if (c == 'F' || c == 'E')
+            result += esc;   // add escape before special char
+        result += c;
+    }
+
+    result += flag;
+    return result;
+}
+
+string charDestuff(const string &data) {
+    string flag = "F";
+    string esc  = "E";
+    string result = "";
+
+    // Skip first and last flag
+    for (int i = 1; i < data.size() - 1; i++) {
+        if (data[i] == 'E')
+            i++; // skip escape
+        result += data[i];
+    }
+    return result;
+}
+
+// ------------------------------------------------------
+// BIT STUFFING
+// ------------------------------------------------------
+string bitStuff(const string &bits) {
+    string result = "";
+    int count = 0;
+
+    for (char b : bits) {
+        result += b;
+        if (b == '1') {
+            count++;
+            if (count == 5) {
+                result += '0'; // insert stuffed bit
+                count = 0;
+            }
+        } else {
+            count = 0;
+        }
+    }
+    return result;
+}
+
+string bitDestuff(const string &bits) {
+    string result = "";
+    int count = 0;
+
+    for (int i = 0; i < bits.length(); i++) {
+        result += bits[i];
+
+        if (bits[i] == '1') {
+            count++;
+            if (count == 5) {
+                i++;     // skip the stuffed 0
+                count = 0;
+            }
+        } else {
+            count = 0;
+        }
+    }
+    return result;
+}
+
+// ------------------------------------------------------
+// MAIN MENU
+// ------------------------------------------------------
+int main() {
+    while (true) {
+        cout << "\n--- DLL Framing Schemes ---\n";
+        cout << "1. Character Stuffing\n";
+        cout << "2. Character Destuffing\n";
+        cout << "3. Bit Stuffing\n";
+        cout << "4. Bit Destuffing\n";
+        cout << "5. Exit\n";
+        cout << "Enter choice: ";
+
+        int ch;
+        cin >> ch;
+
+        if (ch == 1) {
+            string data;
+            cout << "Enter data string: ";
+            cin >> data;
+
+            cout << "Stuffed Data: " << charStuff(data) << endl;
+        }
+
+        else if (ch == 2) {
+            string data;
+            cout << "Enter stuffed data: ";
+            cin >> data;
+
+            cout << "Destuffed Data: " << charDestuff(data) << endl;
+        }
+
+        else if (ch == 3) {
+            string bits;
+            cout << "Enter bit stream: ";
+            cin >> bits;
+
+            cout << "Stuffed Bits: " << bitStuff(bits) << endl;
+        }
+
+        else if (ch == 4) {
+            string bits;
+            cout << "Enter stuffed bit stream: ";
+            cin >> bits;
+
+            cout << "Destuffed Bits: " << bitDestuff(bits) << endl;
+        }
+
+        else if (ch == 5) {
+            cout << "Exiting...\n";
+            break;
+        }
+
+        else {
+            cout << "Invalid choice! Try again.\n";
+        }
+    }
+    return 0;
+}
