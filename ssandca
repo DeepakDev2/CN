@@ -1,0 +1,41 @@
+// CONGESTION + SLOW START
+
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int cwnd = 1;         // Congestion window (starts small)
+    int ssthresh = 16;    // Slow start threshold
+
+    cout << "TCP Slow Start + Congestion Avoidance Simulation\n";
+    cout << "-------------------------------------------------\n";
+
+    for(int step = 1; step <= 15; step++) {
+
+        cout << "Step " << step << " | CWND = " << cwnd;
+
+        // Simulate packet loss when cwnd reaches 20
+        if(cwnd >= 20) {
+            cout << "  <-- Packet Loss!";
+            ssthresh = cwnd / 2;
+            cwnd = 1;
+            cout << "\nThreshold updated: " << ssthresh;
+            cout << "\nRestarting Slow Start...\n";
+            continue;
+        }
+
+        // If in slow start: exponential growth
+        if(cwnd < ssthresh) {
+            cwnd *= 2;
+            cout << "  (Slow Start -> CWND doubled to " << cwnd << ")" << endl;
+        }
+        // Otherwise linear increase → congestion avoidance
+        else {
+            cwnd += 1;
+            cout << "  (Congestion Avoidance -> CWND increased to " << cwnd << ")" << endl;
+        }
+    }
+
+    return 0;
+}
